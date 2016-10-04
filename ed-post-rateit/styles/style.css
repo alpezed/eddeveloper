@@ -1,0 +1,9 @@
+.er_rateit {
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 17px;
+}
+.er_rateit>strong {
+    float: left;
+    margin-right: 5px;
+}

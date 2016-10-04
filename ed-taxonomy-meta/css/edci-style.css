@@ -1,0 +1,4 @@
+#wpadminbar #wp-admin-bar-tax_meta_admin_bar .ab-icon:before {
+    content: "\f111";
+    top: 3px;
+}

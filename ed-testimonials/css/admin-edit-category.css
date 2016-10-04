@@ -1,0 +1,54 @@
+/*** Edit Category Page ***/
+.cat-thumbnail {
+    display: inline-block;
+    position: relative;
+    background: #000;
+    cursor: pointer;
+}
+.cat-thumbnail:hover img {
+    opacity: 0.8;
+}
+.cat-thumbnail img {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    display: block;
+}
+.cat-thumbnail:hover {
+    -webkit-box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.28);
+    -moz-box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.28);
+    box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.28);
+}
+.cat-thumbnail .dashicons {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    font-size: 30px;
+    width: 30px;
+    height: 25px;
+    /* z-index: 1; */
+    color: rgba(255, 255, 255, 0.67);
+    opacity: 0;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+.cat-thumbnail:hover .dashicons {
+    opacity: 1;
+}
+#cat-img-upload-button.btn-single {
+    display: none;
+}
+.catInput {
+    display: block;
+}
+#cat-img-remove-button {
+    display: none;
+}

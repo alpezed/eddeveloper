@@ -1,0 +1,58 @@
+ul#custom-type-list>li {
+    position: relative;
+    overflow: auto;
+    margin: 7px 0;
+    padding: 10px 16px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    background: #fff;
+    max-width: 400px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+ul#custom-type-list>li:hover {
+    cursor: move;
+}
+
+#loading-animation {
+	display:none
+}
+.client_profile {
+    display: inline-block;
+    position: relative;
+    border: 1px solid #cacaca;
+    max-width: 160px;
+    max-height: 160px;
+    overflow: hidden;
+}
+.client_profile img {
+    width: 100%;
+}
+.client_profile #img-delete-button {
+    position: absolute;
+    right: 0px;
+    top: 0;
+    background: #cacaca;
+    cursor: pointer;
+}
+.client-row {
+    margin-bottom: 20px;
+}
+.client-row input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+}
+.client-row label {
+    font-weight: bold;
+}
+td.custom_image_data img {
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+td.custom_image_data img:hover {
+    opacity: 0.8;
+}

@@ -1,0 +1,20 @@
+.testimonial_box {
+    text-align: center;
+}
+.tm_thumb img {
+    border-radius: 100px;
+    width: 60px !important;
+    height: 60px !important;
+    margin: 0 auto 20px;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+.testimonial_box cite {
+    font-size: 15px;
+}
+.testimonial_box blockquote {
+    border: 0;
+}
