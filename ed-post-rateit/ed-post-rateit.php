@@ -3,7 +3,7 @@
  * Plugin Name: Ed's Post Rateit
  * Plugin URI: http://wordpress.org/
  * Description: A simple image slide for wordpress.
- * Author: @alpezed
+ * Author: Ed A.
  * Author URI: http://wordpress.org/
  * Version: 0.0.1
  * License: GPLv2.
