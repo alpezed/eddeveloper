@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Ed Related Posts Settings
+ *
+ * @author Ed A.
+ */
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
