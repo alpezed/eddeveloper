@@ -3,9 +3,7 @@
  * Admin View: Settings
  */
 
-if( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+if( ! defined( 'ABSPATH' ) ) exit;
 
 ?>
 
@@ -26,8 +24,8 @@ if( ! defined( 'ABSPATH' ) ) {
                 <tr>
                     <th><label for="ed_rp_title"><?php _e( 'Related Post Title', 'edrp' ); ?></label></th>
                     <td>
-                        <input type="text" name="ed_rp_title" id="ed_rp_title" class="all-options" value="<?php echo $edrp[ 'ed_rp_title' ]; ?>">
-                        <p class="description">Title for related posts (Default: Related Posts)</p>
+                        <input type="text" name="ed_rp_title" id="ed_rp_title" class="all-options" value="<?php echo ( isset( $edrp[ 'ed_rp_title' ] ) ) ? $edrp[ 'ed_rp_title' ] : 'Related Posts'; ?>">
+                        <p class="description"><?php _e( 'Title for related posts (Default: Related Posts)', 'edrp' ); ?></p>
                     </td>
                 </tr>
 
@@ -35,7 +33,7 @@ if( ! defined( 'ABSPATH' ) ) {
                     <th><label for="ed_rp_display"><?php _e( 'Enable Related Post', 'edrp' ); ?></label></th>
                     <td>
                         <input type="checkbox" name="ed_rp_display" id="ed_rp_display" value="true" <?php checked( $edrp[ 'ed_rp_display' ], 'true' ); ?>>
-                        <span class="description">Check to enable related posts on your website</span>
+                        <span class="description"><?php _e( 'Check to enable related posts on your website', 'edrp' ); ?></span>
                     </td>
                 </tr>
 
@@ -43,7 +41,7 @@ if( ! defined( 'ABSPATH' ) ) {
                     <th><label for="ed_rp_show_thumb"><?php _e( 'Show Thumbnail', 'edrp' ); ?></label></th>
                     <td>
                         <input type="checkbox" name="ed_rp_show_thumb" id="ed_rp_show_thumb" value="true" <?php checked( $edrp[ 'ed_rp_show_thumb' ], 'true' ); ?>>
-                        <span class="description">Check to display thumbnail on related posts display</span>
+                        <span class="description"><?php _e( 'Check to display thumbnail on related posts display', 'edrp' ); ?></span>
                     </td>
                 </tr>
 
@@ -55,7 +53,7 @@ if( ! defined( 'ABSPATH' ) ) {
                             <option value="3" <?php selected( $edrp[ 'ed_rp_layout' ], '3' ) ?>>3 Columns</option>
                             <option value="4" <?php selected( $edrp[ 'ed_rp_layout' ], '4' ) ?>>4 Columns</option>
                         </select>
-                        <p class="description">Number of columns to display (default 2)</p>
+                        <p class="description"><?php _e( 'Number of columns to display (default 2)', 'edrp' ); ?></p>
                     </td>
                 </tr>
 
@@ -71,7 +69,7 @@ if( ! defined( 'ABSPATH' ) ) {
                             }
                             ?>
                         </select>
-                        <p class="description">Number of related posts to display</p>
+                        <p class="description"><?php _e( 'Number of related posts to display', 'edrp' ); ?></p>
                     </td>
                 </tr>
 

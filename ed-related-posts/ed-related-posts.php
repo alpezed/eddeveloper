@@ -40,10 +40,14 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
         // Enqueue Scripts
         public function ed_rp_enqueue_scripts()
         {
-            // enqueue styles
+            /**
+             * enqueue css file
+             */
             wp_enqueue_style( 'ed-rp-style', plugins_url( 'css/ed-related-posts.css', __FILE__ ) );
 
-            // enqueue scripts
+            /**
+             * enqueue scripts
+             */
             wp_enqueue_script( 'ed-rp-script', plugins_url( 'js/ed-related-posts.js', __FILE__ ), array(), '10102016', true );
         }
 
@@ -54,21 +58,40 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
             if( $edrp[ 'ed_rp_display' ] == 'true' ) {
                 add_filter( 'the_content', array( $this, 'ed_rp_display_func' ) );
             }
+
+            add_image_size( 'relatedPostThumbnail', 400, 300, false );
         }
 
         public function ed_rp_display()
         {
             $edrp = get_option( 'ed_rp' );
 
-            // Related Posts Columns Layout
+            /**
+             * Related Posts Columns Layout
+             */
             $ed_rp_col = ( isset( $edrp[ 'ed_rp_layout' ] ) ) ? $edrp[ 'ed_rp_layout' ] : 2;
 
-            $content = '
-                        <div class="eder-col-'.$ed_rp_col.'">
-                            <h3><a href="' . get_permalink() . '">' . get_the_title() . '</a></h3>
-                            '.get_the_excerpt().'
-                            <a href="' . get_permalink() . '">Read more &rarr;</a>
-                        </div>';
+            /**
+             * Check if post thumbnail enabled and if there's a post thumbnail on it's post
+             */
+            if( $edrp[ 'ed_rp_show_thumb' ] == "true" ) {
+                if( has_post_thumbnail() ) {
+                    $edrp_thumbnail = wp_get_attachment_image( get_post_thumbnail_id( get_the_ID() ), 'relatedPostThumbnail' );
+                }
+            }
+
+            $edrp_content = sprintf(
+                                __( '<div class="eder-col-%1$d">%2$s<h4><a href="%3$s">%4$s</a></h4>%5$s<a href="%6$s">%7$s</a></div>', 'edrp' ),
+                                esc_attr( $ed_rp_col ),
+                                $edrp_thumbnail,
+                                esc_url( get_permalink() ),
+                                esc_html( get_the_title() ),
+                                get_the_excerpt(),
+                                esc_url( get_permalink() ),
+                                __( '<br>Read more &rarr;' )
+                            );
+
+            $content = $edrp_content;
 
             return $content;
         }
@@ -95,21 +118,21 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
                 return $content;
             }
 
-            $cats_id = $this->cats_id();
-
             $posts_num = ( $edrp[ 'ed_rp_count' ] ) ? $edrp[ 'ed_rp_count' ] : 2;
 
             $args = array(
                 'post_status' => 'publish',
                 'posts_per_page' => (int) $posts_num,
-                'category__in' => $cats_id,
+                'category__in' => $this->cats_id(),
                 'post__not_in' => array( $id ),
                 'orderby' => 'rand'
             );
 
             $related_posts = new WP_Query( $args );
 
-            // Related Posts Title
+            /**
+             * Related Posts Title
+             */
             $ed_rp_title = ( ! empty( $edrp[ 'ed_rp_title' ] ) ) ? $ed_rp_title = $edrp[ 'ed_rp_title' ] : 'Related Posts';
 
             $i = 1;

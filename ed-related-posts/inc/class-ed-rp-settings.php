@@ -4,9 +4,7 @@
  *
  * @author Ed A.
  */
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+if( ! defined( 'ABSPATH' ) ) exit;
 
 if( ! class_exists( 'Ed_Rp_Admin_Settings' ) ) :
 
@@ -34,14 +32,19 @@ if( ! class_exists( 'Ed_Rp_Admin_Settings' ) ) :
 
             check_admin_referer( 'ed_rp_options_verify' );
 
-            $edrp                       = get_option( 'ed_rp' );
-            $edrp[ 'ed_rp_title' ]      = sanitize_text_field( $_POST[ 'ed_rp_title' ] );
-            $edrp[ 'ed_rp_display' ]    = $_POST[ 'ed_rp_display' ];
-            $edrp[ 'ed_rp_show_thumb' ] = $_POST[ 'ed_rp_show_thumb' ];
-            $edrp[ 'ed_rp_layout' ]     = absint( $_POST[ 'ed_rp_layout' ] );
-            $edrp[ 'ed_rp_count' ]      = absint( $_POST[ 'ed_rp_count' ] );
+            $edrp = get_option( 'ed_rp' );
 
-            update_option( 'ed_rp', $edrp );
+            $edrp_opts = array(
+                'ed_rp_title'      => sanitize_text_field( $_POST[ 'ed_rp_title' ] ),
+                'ed_rp_display'    => $_POST[ 'ed_rp_display' ],
+                'ed_rp_show_thumb' => $_POST[ 'ed_rp_show_thumb' ],
+                'ed_rp_layout'     => absint( $_POST[ 'ed_rp_layout' ] ),
+                'ed_rp_count'      => absint( $_POST[ 'ed_rp_count' ] )
+            );
+
+            $edrp_option = array_merge( $edrp, $edrp_opts );
+
+            update_option( 'ed_rp', $edrp_option );
 
             wp_redirect( admin_url( 'options-general.php?page=ed-rp-options&status=1' ) );
         }

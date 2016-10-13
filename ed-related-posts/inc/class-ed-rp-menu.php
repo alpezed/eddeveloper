@@ -4,9 +4,7 @@
  *
  * @author Ed A.
  */
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+if( ! defined( 'ABSPATH' ) ) exit;
 
 if( ! class_exists( 'Ed_Rp_Admin_Menu' ) ) :
 
