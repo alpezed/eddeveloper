@@ -5,22 +5,11 @@
  * Description: Display a list of related posts on your website.
  * Author: @alpezed
  * Author URI: http://wordpress.org/
- * Version: 1.0.0
+ * Version: 1.1.0
  * License: GPLv2.
  **/
 
 if( ! defined( 'ABSPATH' ) ) exit;
-
-/**
- * Constant
- */
-define( 'ED_RP_PLUGIN_DIR_PATH', plugin_dir_path(__FILE__) );
-
-/**
- * Include Files
- */
-require_once ED_RP_PLUGIN_DIR_PATH . '/inc/class-ed-rp-menu.php';
-require_once ED_RP_PLUGIN_DIR_PATH . '/inc/class-ed-rp-settings.php';
 
 /**
  * Ed_Related_Posts Class.
@@ -29,19 +18,58 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
 
     class Ed_Related_Posts {
 
+        protected $plugin_option;
+
         public function __construct()
         {
-            //Actions and  Filter
-            register_activation_hook( __FILE__, array( $this, 'ed_rp_activation' ) );
-            add_action( 'init', array( $this, 'ed_rp_enable' ) );
-            add_action( 'wp_enqueue_scripts', array( $this, 'ed_rp_enqueue_scripts' ), 9999 );
+            $this->define_constants();
+            $this->include_files();
+            $this->init_hooks();
         }
 
-        // Enqueue Scripts
+        private function init_hooks()
+        {
+            //Actions and  Filters
+            register_activation_hook( __FILE__, array( $this, 'ed_rp_activation' ) );
+            register_deactivation_hook( __FILE__, array( $this, 'ed_rp_deactivation' ) );
+            add_action( 'init', array( $this, 'ed_rp_enable' ) );
+            add_action( 'wp_enqueue_scripts', array( __CLASS__, 'ed_rp_enqueue_scripts' ), 9999 );
+            add_action( 'wp_ajax_edrp_load_more', array( $this, 'load_more' ) );
+            add_action( 'wp_ajax_nopriv_edrp_load_more', array( $this, 'load_more' ) );
+        }
+
+        private function define_constants()
+        {
+            /**
+             * Define Ed RP Constants
+             */
+            $this->define( 'ED_RP_PLUGIN_DIR_PATH', plugin_dir_path(__FILE__) );
+        }
+
+        private function define( $name, $value )
+        {
+            if( ! defined( $name ) )
+                define( $name, $value );
+        }
+
+        private function include_files()
+        {
+            /**
+             * Include Files
+             */
+            require_once ED_RP_PLUGIN_DIR_PATH . '/inc/class-ed-rp-menu.php';
+            require_once ED_RP_PLUGIN_DIR_PATH . '/inc/class-ed-rp-settings.php';
+            require_once ED_RP_PLUGIN_DIR_PATH . '/inc/class-ed-rp-activator.php';
+            require_once ED_RP_PLUGIN_DIR_PATH . '/inc/class-ed-rp-deactivator.php';
+            require_once ED_RP_PLUGIN_DIR_PATH . '/inc/class-ed-rp-ajax.php';
+        }
+
+
+
         public function ed_rp_enqueue_scripts()
         {
             /**
-             * enqueue css file
+             * enqueue styles
              */
             wp_enqueue_style( 'ed-rp-style', plugins_url( 'css/ed-related-posts.css', __FILE__ ) );
 
@@ -49,38 +77,45 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
              * enqueue scripts
              */
             wp_enqueue_script( 'ed-rp-script', plugins_url( 'js/ed-related-posts.js', __FILE__ ), array(), '10102016', true );
+
+            /**
+             * localize scripts
+             */
+            wp_localize_script( 'ed-rp-script', 'ED_RP_SCRIPT', array(
+                'ajax_url' => admin_url( 'admin-ajax.php' )
+            ) );
         }
 
         public function ed_rp_enable()
         {
-            $edrp = get_option( 'ed_rp' );
+            $this->plugin_option = get_option( 'ed_rp' );
 
-            if( $edrp[ 'ed_rp_display' ] == 'true' ) {
+            if( $this->plugin_option[ 'ed_rp_display' ] ) {
                 add_filter( 'the_content', array( $this, 'ed_rp_display_func' ) );
             }
 
-            add_image_size( 'relatedPostThumbnail', 400, 300, false );
+            add_image_size( 'relatedPostThumbnail', 400, 300, true );
         }
 
-        public function ed_rp_display()
+        public static function ed_rp_display()
         {
-            $edrp = get_option( 'ed_rp' );
+            $plugin_option = get_option( 'ed_rp' );
 
             /**
              * Related Posts Columns Layout
              */
-            $ed_rp_col = ( isset( $edrp[ 'ed_rp_layout' ] ) ) ? $edrp[ 'ed_rp_layout' ] : 2;
+            $ed_rp_col = ( isset( $plugin_option[ 'ed_rp_layout' ] ) ) ? $plugin_option[ 'ed_rp_layout' ] : 2;
 
             /**
              * Check if post thumbnail enabled and if there's a post thumbnail on it's post
              */
-            if( $edrp[ 'ed_rp_show_thumb' ] == "true" ) {
+            if( $plugin_option[ 'ed_rp_show_thumb' ] == true ) {
                 if( has_post_thumbnail() ) {
                     $edrp_thumbnail = wp_get_attachment_image( get_post_thumbnail_id( get_the_ID() ), 'relatedPostThumbnail' );
                 }
             }
 
-            $edrp_content = sprintf(
+            $content = sprintf(
                                 __( '<div class="eder-col-%1$d">%2$s<h4><a href="%3$s">%4$s</a></h4>%5$s<a href="%6$s">%7$s</a></div>', 'edrp' ),
                                 esc_attr( $ed_rp_col ),
                                 $edrp_thumbnail,
@@ -91,12 +126,12 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
                                 __( '<br>Read more &rarr;' )
                             );
 
-            $content = $edrp_content;
+            $content = $content;
 
             return $content;
         }
 
-        public function cats_id() {
+        public static function cats_id() {
             $terms = get_the_category();
 
             $cats = array();
@@ -109,8 +144,7 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
 
         public function ed_rp_display_func( $content )
         {
-
-            $edrp = get_option( 'ed_rp' );
+            $this->plugin_option = get_option( 'ed_rp' );
 
             $id = get_the_ID();
 
@@ -118,14 +152,14 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
                 return $content;
             }
 
-            $posts_num = ( $edrp[ 'ed_rp_count' ] ) ? $edrp[ 'ed_rp_count' ] : 2;
+            $posts_num = ( $this->plugin_option[ 'ed_rp_count' ] ) ? $this->plugin_option[ 'ed_rp_count' ] : 2;
 
             $args = array(
                 'post_status' => 'publish',
                 'posts_per_page' => (int) $posts_num,
-                'category__in' => $this->cats_id(),
+                'category__in' => self::cats_id(),
                 'post__not_in' => array( $id ),
-                'orderby' => 'rand'
+                //'orderby' => 'rand'
             );
 
             $related_posts = new WP_Query( $args );
@@ -133,7 +167,7 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
             /**
              * Related Posts Title
              */
-            $ed_rp_title = ( ! empty( $edrp[ 'ed_rp_title' ] ) ) ? $ed_rp_title = $edrp[ 'ed_rp_title' ] : 'Related Posts';
+            $ed_rp_title = ( ! empty( $this->plugin_option[ 'ed_rp_title' ] ) ) ? $this->plugin_option[ 'ed_rp_title' ] : 'Related Posts';
 
             $i = 1;
             if( $related_posts->have_posts() ) :
@@ -144,33 +178,38 @@ if( ! class_exists( 'Ed_Related_Posts' ) ) :
                     while( $related_posts->have_posts() ) :
                         $related_posts->the_post();
 
-                        $content .= $this->ed_rp_display();
+                        $content .= self::ed_rp_display();
 
-                        if( $i % $edrp[ 'ed_rp_layout' ] == 0 ) {
+                        if( $i % $this->plugin_option[ 'ed_rp_layout' ] == 0 ) {
                             $content .= '<div class="clear"></div>';
                         }
 
                         $i++;
-
                     endwhile;
 
                 $content .= '</div>';
+
+                $content .= '<button class="load-more" data-id="'.$id.'" data-page="1">Show More Related Posts</button>';
+
                 wp_reset_query();
+
             endif;
 
             return $content;
-
         }
 
-        public function ed_rp_activation()
+        public function load_more() {
+            Ed_Related_Ajax::ed_rp_load_more();
+        }
+
+        private function ed_rp_activation()
         {
-            global $wp_version;
+            Ed_Rp_Activator::activate();
+        }
 
-            if( version_compare( $wp_version, '4.6.1', '<' ) ) {
-                wp_die( __( 'This plugin requires WordPress version 4.6.1 or newer,
-please run your WordPress upgrade to utilize this plugin.', 'edrp' ) );
-            }
-
+        private function ed_rp_deactivation()
+        {
+            Ed_Rp_Deactivator::deactivate();
         }
 
     }

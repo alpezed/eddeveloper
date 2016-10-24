@@ -34,7 +34,7 @@ if( ! class_exists( 'Ed_Rp_Admin_Menu' ) ) :
 
         /**
          * Init Setting Page
-        */
+         */
         public function ed_related_posts_opt() {
             Ed_Rp_Admin_Settings::admin_view_settings();
         }

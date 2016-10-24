@@ -32,7 +32,7 @@ if( ! defined( 'ABSPATH' ) ) exit;
                 <tr>
                     <th><label for="ed_rp_display"><?php _e( 'Enable Related Post', 'edrp' ); ?></label></th>
                     <td>
-                        <input type="checkbox" name="ed_rp_display" id="ed_rp_display" value="true" <?php checked( $edrp[ 'ed_rp_display' ], 'true' ); ?>>
+                        <input type="checkbox" name="ed_rp_display" id="ed_rp_display" value="1" <?php checked( $edrp[ 'ed_rp_display' ], 1, true ); ?>>
                         <span class="description"><?php _e( 'Check to enable related posts on your website', 'edrp' ); ?></span>
                     </td>
                 </tr>
@@ -40,7 +40,7 @@ if( ! defined( 'ABSPATH' ) ) exit;
                 <tr>
                     <th><label for="ed_rp_show_thumb"><?php _e( 'Show Thumbnail', 'edrp' ); ?></label></th>
                     <td>
-                        <input type="checkbox" name="ed_rp_show_thumb" id="ed_rp_show_thumb" value="true" <?php checked( $edrp[ 'ed_rp_show_thumb' ], 'true' ); ?>>
+                        <input type="checkbox" name="ed_rp_show_thumb" id="ed_rp_show_thumb" value="1" <?php checked( $edrp[ 'ed_rp_show_thumb' ], 1, true ); ?>>
                         <span class="description"><?php _e( 'Check to display thumbnail on related posts display', 'edrp' ); ?></span>
                     </td>
                 </tr>
