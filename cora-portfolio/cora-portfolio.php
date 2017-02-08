@@ -5,7 +5,7 @@
  * Description: Simple Portfolio Plugin.
  * Author: @ruth
  * Author URI: http://cogitaxis.com/
- * Version: 0.0.1
+ * Version: 1.0.0
  * License: GPLv2.
  **/
 
