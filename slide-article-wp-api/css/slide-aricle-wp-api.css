@@ -1,0 +1,38 @@
+.owl-prev, .owl-next {
+  position:absolute;
+  top: 33%;
+  padding:0 !important;
+  margin:0 !important;
+  z-index:100;
+  font-size: 3rem !important;
+  color: #555 !important;
+  background: none !important;
+}
+.owl-prev {
+  left: -30px;
+}
+.owl-next {
+  right: -30px;
+}
+.engaoor-article {
+    max-width: 90%;
+    margin: auto;
+    padding-top: 20px;
+}
+.owl-nav i {
+    line-height: inherit;
+}
+.sl-api-article h3 {
+  margin-top: 0;
+  font-size: 16px;
+  padding-top: 10px;
+}
+/** Mobile **/
+@media only screen and (max-width: 768px) {
+    .owl-prev {
+        left: -20px;
+    }
+    .owl-next {
+        right: -20px;
+    }
+}
